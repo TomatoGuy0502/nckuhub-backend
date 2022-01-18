@@ -26,11 +26,11 @@ export class UsersService {
     return this.usersRepository.findOne(userId)
   }
 
-  update(userId: string, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${userId} user`
-  }
-
-  remove(userId: string) {
-    return `This action removes a #${userId} user`
+  async update(userId: string, updateUserInput: UpdateUserInput) {
+    return await this.usersRepository.save({
+      id: userId,
+      displayName: updateUserInput?.displayName,
+      email: updateUserInput?.email
+    })
   }
 }

@@ -25,7 +25,7 @@ export class Comment {
   userId: string
 
   @Column()
-  courseId: number
+  courseId: string
 
   @ManyToOne(() => User, (user) => user.comments)
   user: User

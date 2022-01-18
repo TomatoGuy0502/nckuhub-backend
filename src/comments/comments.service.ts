@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common'
-import { CreateCommentDto } from './dto/create-comment.dto'
-import { UpdateCommentDto } from './dto/update-comment.dto'
+import { Repository } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
+import { CreateCommentInput } from './dto/create-comment.input'
+import { UpdateCommentInput } from './dto/update-comment.input'
+import { Comment } from './entities/comment.entity'
 
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment'
+  constructor(@InjectRepository(Comment) private commentRepository: Repository<Comment>) {}
+
+  create(createCommentDto: CreateCommentInput) {
+    const comment = new Comment()
+    comment.text = createCommentDto.text
+    comment.got = createCommentDto.got
+    comment.cold = createCommentDto.cold
+    comment.sweet = createCommentDto.sweet
+    comment.userId = createCommentDto.userId
+    comment.courseId = createCommentDto.courseId
+    return this.commentRepository.save(comment)
   }
 
-  findAll() {
-    return `This action returns all comments`
+  findAll(): Promise<Comment[]> {
+    return this.commentRepository.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`
+  findAllByUserId(userId: string): Promise<Comment[]> {
+    return this.commentRepository.find({
+      where: { userId },
+      relations: ['course', 'course.department']
+    })
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`
+  findOne(commentId: string): Promise<Comment> {
+    return this.commentRepository.findOne(commentId)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`
+  async update(commentId: string, updateCommentDto: UpdateCommentInput) {
+    return await this.commentRepository.update(commentId, updateCommentDto)
+  }
+
+  async remove(commentId: string) {
+    return await this.commentRepository.delete(commentId)
   }
 }
