@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { Course } from './entities/course.entity'
+import { CourseEntity } from './entities/course.entity'
 
 @Injectable()
 export class CoursesService {
-  constructor(@InjectRepository(Course) private coursesRepository: Repository<Course>) {}
+  constructor(
+    @InjectRepository(CourseEntity) private coursesRepository: Repository<CourseEntity>
+  ) {}
 
-  findAll(): Promise<Course[]> {
+  findAll(): Promise<CourseEntity[]> {
     return this.coursesRepository.find({
       relations: ['department']
     })

@@ -1,37 +1,38 @@
 import { Injectable } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { CreateCommentInput } from './dto/create-comment.input'
 import { UpdateCommentInput } from './dto/update-comment.input'
-import { Comment } from './entities/comment.entity'
+import { CommentEntity } from './entities/comment.entity'
 
 @Injectable()
 export class CommentsService {
-  constructor(@InjectRepository(Comment) private commentRepository: Repository<Comment>) {}
+  constructor(
+    @InjectRepository(CommentEntity) private commentRepository: Repository<CommentEntity>
+  ) {}
 
-  create(createCommentDto: CreateCommentInput) {
-    const comment = new Comment()
-    comment.text = createCommentDto.text
-    comment.got = createCommentDto.got
-    comment.cold = createCommentDto.cold
-    comment.sweet = createCommentDto.sweet
-    comment.userId = createCommentDto.userId
-    comment.courseId = createCommentDto.courseId
+  create(userId: string, courseId: string, text: string, got: number, cold: number, sweet: number) {
+    const comment = new CommentEntity()
+    comment.userId = userId
+    comment.courseId = courseId
+    comment.text = text
+    comment.got = got
+    comment.cold = cold
+    comment.sweet = sweet
     return this.commentRepository.save(comment)
   }
 
-  findAll(): Promise<Comment[]> {
+  findAll(): Promise<CommentEntity[]> {
     return this.commentRepository.find()
   }
 
-  findAllByUserId(userId: string): Promise<Comment[]> {
+  findAllByUserId(userId: string): Promise<CommentEntity[]> {
     return this.commentRepository.find({
       where: { userId },
       relations: ['course', 'course.department']
     })
   }
 
-  findOne(commentId: string): Promise<Comment> {
+  findOne(commentId: string): Promise<CommentEntity> {
     return this.commentRepository.findOne(commentId)
   }
 

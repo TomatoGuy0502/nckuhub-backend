@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm'
-import { Department } from '../../departments/entities/department.entity'
-import { Comment } from '../../comments/entities/comment.entity'
-import { Favorite } from 'src/favorites/entities/favorite.entity'
+import { DepartmentEntity } from '../../departments/entities/department.entity'
+import { CommentEntity } from '../../comments/entities/comment.entity'
+import { FavoriteEntity } from 'src/favorites/entities/favorite.entity'
 
 @Entity('courses')
-export class Course {
+export class CourseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -29,13 +29,13 @@ export class Course {
   @Column()
   semester: string
 
-  @ManyToOne(() => Department, (department) => department.course)
+  @ManyToOne(() => DepartmentEntity, (department) => department.course)
   @JoinColumn()
-  department: Department
+  department: DepartmentEntity
 
-  @OneToMany(() => Comment, (comment) => comment.course)
-  comments: Comment[]
+  @OneToMany(() => CommentEntity, (comment) => comment.course)
+  comments: CommentEntity[]
 
-  @OneToMany(() => Favorite, (favorite) => favorite.user)
-  favorites: Favorite[]
+  @OneToMany(() => FavoriteEntity, (favorite) => favorite.user)
+  favorites: FavoriteEntity[]
 }

@@ -8,14 +8,12 @@ import { RemoveFavoriteInput } from 'src/favorites/dto/remove-favorite.input'
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    private usersService: UsersService,
-    private favoritesService: FavoritesService
-  ) {}
+  constructor(private usersService: UsersService, private favoritesService: FavoritesService) {}
 
   @Post()
   create(@Body() createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput)
+    const { displayName, email, facebookId } = createUserInput
+    return this.usersService.create(displayName, email, facebookId)
   }
 
   @Get()
@@ -27,10 +25,11 @@ export class UsersController {
   findOne(@Param('userId') userId: string) {
     return this.usersService.findOne(userId)
   }
-  
+
   @Patch(':userId')
   update(@Param('userId') userId: string, @Body() updateUserInput: UpdateUserInput) {
-    return this.usersService.update(userId, updateUserInput)
+    const { displayName, email } = updateUserInput
+    return this.usersService.update(userId, displayName, email)
   }
 
   @Get(':userId/favorites')
@@ -39,13 +38,20 @@ export class UsersController {
   }
 
   @Post(':userId/favorites')
-  createUserFavorite(@Param('userId') userId: string, @Body() createFavoriteInput: CreateFavoriteInput) {
-    return this.favoritesService.createUserFavorite(userId, createFavoriteInput)
+  createUserFavorite(
+    @Param('userId') userId: string,
+    @Body() createFavoriteInput: CreateFavoriteInput
+  ) {
+    const { courseId } = createFavoriteInput
+    return this.favoritesService.createUserFavorite(userId, courseId)
   }
 
   @Delete(':userId/favorites')
-  deleptUserFavorite(@Param('userId') userId: string, @Body() removeFavoriteInput: RemoveFavoriteInput) {
-    return this.favoritesService.removeUserFavorite(userId, removeFavoriteInput)
+  deleptUserFavorite(
+    @Param('userId') userId: string,
+    @Body() removeFavoriteInput: RemoveFavoriteInput
+  ) {
+    const { courseId } = removeFavoriteInput
+    return this.favoritesService.removeUserFavorite(userId, courseId)
   }
-
 }

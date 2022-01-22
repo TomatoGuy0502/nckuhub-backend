@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
-import { Course } from '../../courses/entities/course.entity'
+import { CourseEntity } from '../../courses/entities/course.entity'
 
 @Entity('departments')
-export class Department {
+export class DepartmentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -12,6 +12,6 @@ export class Department {
   @Column()
   departmentCode: string
 
-  @OneToMany(() => Course, (course) => course.department)
-  course: Course[]
+  @OneToMany(() => CourseEntity, (course) => course.department)
+  course: CourseEntity[]
 }

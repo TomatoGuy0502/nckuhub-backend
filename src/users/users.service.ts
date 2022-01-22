@@ -1,36 +1,39 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { CreateUserInput } from './dto/create-user.input'
-import { UpdateUserInput } from './dto/update-user.input'
-import { User } from './entities/user.entity'
+import { UserEntity } from './entities/user.entity'
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
+  constructor(@InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>) {}
 
-  async create(CreateUserInput: CreateUserInput): Promise<User> {
-    const user = new User()
-    user.facebookId = CreateUserInput.facebookId
-    user.email = CreateUserInput.email
-    user.displayName = CreateUserInput.displayName
-    user.points = 0
+  async create(
+    displayName: string,
+    email: string,
+    facebookId: string,
+    points = 0
+  ): Promise<UserEntity> {
+    const user = new UserEntity()
+    user.displayName = displayName
+    user.facebookId = facebookId
+    user.email = email
+    user.points = points
     return await this.usersRepository.save(user)
   }
 
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserEntity[]> {
     return this.usersRepository.find()
   }
 
-  findOne(userId: string): Promise<User> {
+  findOne(userId: string): Promise<UserEntity> {
     return this.usersRepository.findOne(userId)
   }
 
-  async update(userId: string, updateUserInput: UpdateUserInput) {
+  async update(userId: string, displayName?: string, email?: string) {
     return await this.usersRepository.save({
       id: userId,
-      displayName: updateUserInput?.displayName,
-      email: updateUserInput?.email
+      displayName,
+      email
     })
   }
 }

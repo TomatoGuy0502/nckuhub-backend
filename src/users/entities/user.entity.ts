@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
-import { Comment } from 'src/comments/entities/comment.entity'
-import { Favorite } from 'src/favorites/entities/favorite.entity'
+import { CommentEntity } from 'src/comments/entities/comment.entity'
+import { FavoriteEntity } from 'src/favorites/entities/favorite.entity'
 
 @Entity('users')
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -23,9 +23,9 @@ export class User {
   @Column()
   facebookId: string
 
-  @OneToMany(() => Favorite, (favorite) => favorite.user)
-  favorites: Favorite[]
+  @OneToMany(() => FavoriteEntity, (favorite) => favorite.user)
+  favorites: FavoriteEntity[]
 
-  @OneToMany(() => Comment, (comment) => comment.id)
-  comments: Comment[]
+  @OneToMany(() => CommentEntity, (comment) => comment.id)
+  comments: CommentEntity[]
 }

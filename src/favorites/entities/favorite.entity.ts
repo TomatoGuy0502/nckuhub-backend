@@ -1,23 +1,23 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column } from 'typeorm'
-import { Course } from '../../courses/entities/course.entity'
-import { User } from '../../users/entities/user.entity'
+import { CourseEntity } from '../../courses/entities/course.entity'
+import { UserEntity } from '../../users/entities/user.entity'
 
 @Entity('favorites')
-export class Favorite {
+export class FavoriteEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
   @Column()
   courseId: string
 
-  @ManyToOne(() => Course, (course) => course.department)
+  @ManyToOne(() => CourseEntity, (course) => course.department)
   @JoinColumn()
-  course: Course
+  course: CourseEntity
 
   @Column()
   userId: string
 
-  @ManyToOne(() => User, (user) => user.favorites)
+  @ManyToOne(() => UserEntity, (user) => user.favorites)
   @JoinColumn()
-  user: User
+  user: UserEntity
 }

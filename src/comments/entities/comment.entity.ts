@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
-import { User } from 'src/users/entities/user.entity'
-import { Course } from 'src/courses/entities/course.entity'
+import { UserEntity } from 'src/users/entities/user.entity'
+import { CourseEntity } from 'src/courses/entities/course.entity'
 
 @Entity('comments')
-export class Comment {
+export class CommentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -27,9 +27,9 @@ export class Comment {
   @Column()
   courseId: string
 
-  @ManyToOne(() => User, (user) => user.comments)
-  user: User
+  @ManyToOne(() => UserEntity, (user) => user.comments)
+  user: UserEntity
 
-  @ManyToOne(() => Course, (course) => course.comments)
-  course: Course
+  @ManyToOne(() => CourseEntity, (course) => course.comments)
+  course: CourseEntity
 }
