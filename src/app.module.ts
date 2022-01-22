@@ -8,7 +8,18 @@ import { CoursesModule } from './courses/courses.module'
 import { FavoritesModule } from './favorites/favorites.module'
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), UsersModule, CommentsModule, CoursesModule, FavoritesModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'nckuhub_backend',
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      synchronize: true
+    }),
+    UsersModule,
+    CommentsModule,
+    CoursesModule,
+    FavoritesModule
+  ],
   controllers: [AppController],
   providers: [AppService]
 })
