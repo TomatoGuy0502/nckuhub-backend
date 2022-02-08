@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { Repository } from 'typeorm'
+import { DeleteResult, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
+import { CreateCommentInput } from './dto/create-comment.input'
 import { UpdateCommentInput } from './dto/update-comment.input'
 import { CommentEntity } from './entities/comment.entity'
 
@@ -10,15 +11,8 @@ export class CommentsService {
     @InjectRepository(CommentEntity) private commentRepository: Repository<CommentEntity>
   ) {}
 
-  create(userId: string, courseId: string, text: string, got: number, cold: number, sweet: number) {
-    const comment = new CommentEntity()
-    comment.userId = userId
-    comment.courseId = courseId
-    comment.text = text
-    comment.got = got
-    comment.cold = cold
-    comment.sweet = sweet
-    return this.commentRepository.save(comment)
+  create(commentData: CreateCommentInput): Promise<CommentEntity> {
+    return this.commentRepository.save(commentData)
   }
 
   findAll(): Promise<CommentEntity[]> {
@@ -36,11 +30,16 @@ export class CommentsService {
     return this.commentRepository.findOne(commentId)
   }
 
-  async update(commentId: string, updateCommentDto: UpdateCommentInput) {
-    return await this.commentRepository.update(commentId, updateCommentDto)
+  async update(commentId: string, commentData: UpdateCommentInput): Promise<CommentEntity> {
+    const commentToUpdate = await this.commentRepository.findOne(commentId)
+
+    return await this.commentRepository.save({
+      ...commentToUpdate,
+      ...commentData
+    } as CommentEntity)
   }
 
-  async remove(commentId: string) {
+  async remove(commentId: string): Promise<DeleteResult> {
     return await this.commentRepository.delete(commentId)
   }
 }

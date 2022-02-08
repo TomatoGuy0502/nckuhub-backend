@@ -15,7 +15,7 @@ export class CoursesService {
     })
   }
 
-  async findOneWithComments(courseId: string) {
+  async findOneWithComments(courseId: string): Promise<CourseEntity> {
     const course = await this.coursesRepository.findOne(courseId, {
       relations: ['comments', 'department']
     })

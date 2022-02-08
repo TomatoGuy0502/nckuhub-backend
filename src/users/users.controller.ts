@@ -12,8 +12,7 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserInput: CreateUserInput) {
-    const { displayName, email, facebookId } = createUserInput
-    return this.usersService.create(displayName, email, facebookId)
+    return this.usersService.create(createUserInput)
   }
 
   @Get()
@@ -28,8 +27,7 @@ export class UsersController {
 
   @Patch(':userId')
   update(@Param('userId') userId: string, @Body() updateUserInput: UpdateUserInput) {
-    const { displayName, email } = updateUserInput
-    return this.usersService.update(userId, displayName, email)
+    return this.usersService.update(userId, updateUserInput)
   }
 
   @Get(':userId/favorites')
