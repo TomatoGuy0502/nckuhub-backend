@@ -45,7 +45,7 @@ export class UsersController {
   }
 
   @Delete(':userId/favorites')
-  deleptUserFavorite(
+  deleteUserFavorite(
     @Param('userId') userId: string,
     @Body() removeFavoriteInput: RemoveFavoriteInput
   ) {
