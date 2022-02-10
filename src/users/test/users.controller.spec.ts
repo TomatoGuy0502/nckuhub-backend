@@ -10,7 +10,7 @@ import { UserEntity } from '../entities/user.entity'
 import { UsersController } from '../users.controller'
 import { UsersService } from '../users.service'
 import { mockUsersService, mockFavoritesService } from './mock.service'
-import { userStub, favoriteStub, deleteResultStub } from './stub'
+import { userStub, favoriteStub, deleteResultStub, courseStub } from './stub'
 
 describe('UsersController', () => {
   let userController: UsersController
@@ -112,8 +112,8 @@ describe('UsersController', () => {
     it('should call favoritesService', () => {
       expect(mockFavoritesService.findUserFavorites).toBeCalledWith(favoriteStub().userId)
     })
-    it('should return favorites', () => {
-      expect(favorites).toEqual([favoriteStub()])
+    it('should return favorite courses', () => {
+      expect(favorites).toEqual([courseStub()])
     })
   })
 

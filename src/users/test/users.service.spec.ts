@@ -41,6 +41,7 @@ describe('UsersService', () => {
       beforeAll(async () => {
         jest.clearAllMocks()
         mockUsersRepository.findOne.mockResolvedValue(undefined)
+        mockUsersRepository.save.mockResolvedValue(userStub())
         user = await usersService.create(createUserInput)
       })
 

@@ -1,4 +1,4 @@
-import { favoriteStub, userStub, deleteResultStub } from './stub'
+import { favoriteStub, userStub, deleteResultStub, courseStub } from './stub'
 
 export const mockUsersService = {
   create: jest.fn().mockResolvedValue(userStub()),
@@ -7,7 +7,7 @@ export const mockUsersService = {
   findAll: jest.fn().mockResolvedValue([userStub()])
 }
 export const mockFavoritesService = {
-  findUserFavorites: jest.fn().mockResolvedValue([favoriteStub()]),
+  findUserFavorites: jest.fn().mockResolvedValue([courseStub()]),
   createUserFavorite: jest.fn().mockResolvedValue(favoriteStub()),
   removeUserFavorite: jest.fn().mockResolvedValue(deleteResultStub())
 }
