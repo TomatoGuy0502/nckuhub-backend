@@ -1,5 +1,7 @@
+import { userStub } from './stub'
+
 export const mockUsersRepository = {
-  create: jest.fn((dto) => ({ id: 'test', ...dto })),
-  save: jest.fn((dto) => Promise.resolve({ id: 'test', ...dto })),
-  findOne: jest.fn((entity) => Promise.resolve(entity))
+  save: jest.fn(() => Promise.resolve(userStub())),
+  findOne: jest.fn(() => Promise.resolve(userStub())),
+  find: jest.fn(() => Promise.resolve([userStub()]))
 }

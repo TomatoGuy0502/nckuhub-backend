@@ -1,4 +1,4 @@
-import { ConflictException, HttpStatus, Injectable } from '@nestjs/common'
+import { ConflictException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CreateUserInput } from './dto/create-user.input'
@@ -33,6 +33,9 @@ export class UsersService {
 
   async update(userId: string, userData: UpdateUserInput): Promise<UserEntity> {
     const userToUpdate = await this.usersRepository.findOne(userId)
+    if (!userToUpdate) {
+      throw new NotFoundException({ status: HttpStatus.NOT_FOUND, error: '使用者不存在' })
+    }
 
     return await this.usersRepository.save({
       ...userToUpdate,
