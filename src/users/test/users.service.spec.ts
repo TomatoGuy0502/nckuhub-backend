@@ -8,7 +8,7 @@ import { mockUsersRepository } from './mock.repository'
 import { userStub } from './stub'
 
 describe('UsersService', () => {
-  let service: UsersService
+  let usersService: UsersService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,11 +21,11 @@ describe('UsersService', () => {
       ]
     }).compile()
 
-    service = module.get<UsersService>(UsersService)
+    usersService = module.get<UsersService>(UsersService)
   })
 
   it('should be defined', () => {
-    expect(service).toBeDefined()
+    expect(usersService).toBeDefined()
   })
 
   describe('when create is called', () => {
@@ -41,7 +41,7 @@ describe('UsersService', () => {
       beforeAll(async () => {
         jest.clearAllMocks()
         mockUsersRepository.findOne.mockResolvedValue(undefined)
-        user = await service.create(createUserInput)
+        user = await usersService.create(createUserInput)
       })
 
       it('should call usersRepository to check if user exists', () => {
@@ -62,7 +62,7 @@ describe('UsersService', () => {
       })
 
       it('should fail to create user and throw error', async () => {
-        await expect(service.create(createUserInput)).rejects.toThrow()
+        await expect(usersService.create(createUserInput)).rejects.toThrow()
       })
 
       it('should call usersRepository to check if user exists', () => {
@@ -75,7 +75,8 @@ describe('UsersService', () => {
     let users: Partial<UserEntity>[]
 
     beforeAll(async () => {
-      users = await service.findAll()
+      jest.clearAllMocks()
+      users = await usersService.findAll()
     })
 
     it('should call usersRepository', () => {
@@ -88,13 +89,15 @@ describe('UsersService', () => {
 
   describe('when findOne is called', () => {
     let user: Partial<UserEntity>
+    const userId = userStub().id
 
     beforeAll(async () => {
-      user = await service.findOne(userStub().id)
+      jest.clearAllMocks()
+      user = await usersService.findOne(userId)
     })
 
     it('should call usersRepository to check if user exists', () => {
-      expect(mockUsersRepository.findOne).toBeCalledWith(userStub().id)
+      expect(mockUsersRepository.findOne).toBeCalledWith(userId)
     })
     it('should return a specific user', () => {
       expect(user).toEqual(userStub())
@@ -109,18 +112,20 @@ describe('UsersService', () => {
 
     describe('with existing user', () => {
       let user: Partial<UserEntity>
+      const userId = userStub().id
+      const mockedValue = { ...userStub(), ...updateUserInput }
 
       beforeAll(async () => {
         jest.clearAllMocks()
-        mockUsersRepository.save.mockResolvedValue({ ...userStub(), ...updateUserInput })
-        user = await service.update(userStub().id, updateUserInput)
+        mockUsersRepository.save.mockResolvedValue(mockedValue)
+        user = await usersService.update(userId, updateUserInput)
       })
 
       it('should call usersRepository to check if user exists', () => {
-        expect(mockUsersRepository.findOne).toBeCalledWith(userStub().id)
+        expect(mockUsersRepository.findOne).toBeCalledWith(userId)
       })
       it('should return a updated user', () => {
-        expect(user).toEqual({ ...userStub(), ...updateUserInput })
+        expect(user).toEqual(mockedValue)
       })
     })
 
@@ -131,7 +136,7 @@ describe('UsersService', () => {
       })
 
       it('should fail to update user and throw error', async () => {
-        await expect(service.update('non existing id', updateUserInput)).rejects.toThrow()
+        await expect(usersService.update('non existing id', updateUserInput)).rejects.toThrow()
       })
       it('should call usersRepository to check if user exists', () => {
         expect(mockUsersRepository.findOne).toBeCalledWith('non existing id')
